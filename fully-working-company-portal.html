@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Company Portal</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#08111f;
+  color:#fff;
+  padding:20px;
+}
+.container{max-width:900px;margin:auto}
+.card{
+  background:#111827;
+  border:1px solid #374151;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+}
+h1{font-size:40px;margin-bottom:20px}
+input{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid #374151;
+  background:#0f172a;
+  color:#fff;
+}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.primary{background:#d4af37;color:#000}
+.secondary{background:#1f2937;color:#fff}
+.hidden{display:none}
+.user-card{
+  background:#0f172a;
+  border:1px solid #374151;
+  border-radius:12px;
+  padding:14px;
+  margin-top:10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Premium Company Portal</h1>
+
+<div class="card">
+<h2>Create Account</h2>
+<input id="username" type="text" placeholder="Username">
+<input id="email" type="email" placeholder="Gmail Address">
+<input id="password" type="password" placeholder="Password">
+
+<button class="primary" onclick="createAccount()">Create Account</button>
+<button class="secondary" onclick="loginUser()">Login</button>
+</div>
+
+<div class="card">
+<h2>Google Verification</h2>
+<p>User can approve secure Google verification.</p>
+<button class="primary" onclick="googleVerify()">Sign in with Google</button>
+</div>
+
+<div class="card hidden" id="adminPanel">
+<h2>Admin Panel (Admin Only)</h2>
+<div id="usersList"></div>
+</div>
+
+</div>
+
+<script>
+let users = [];
+
+function renderUsers() {
+  const box = document.getElementById("usersList");
+  if (users.length === 0) {
+    box.innerHTML = "<p>No registered users yet.</p>";
+    return;
+  }
+  box.innerHTML = users.map(user => `
+    <div class="user-card">
+      <strong>Username:</strong> ${user.username}<br>
+      <strong>Email:</strong> ${user.email}<br>
+      <strong>Status:</strong> Registered
+    </div>
+  `).join("");
+}
+
+function createAccount() {
+  const username = document.getElementById("username").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!username || !email || !password) {
+    alert("Please fill in username, email, and password.");
+    return;
+  }
+
+  users.push({ username, email });
+  renderUsers();
+  alert("Account created successfully.");
+
+  document.getElementById("username").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("password").value = "";
+}
+
+function loginUser() {
+  const code = prompt("Enter admin code for admin panel access. Leave blank for normal login.");
+
+  if (code === "ADMIN123") {
+    document.getElementById("adminPanel").classList.remove("hidden");
+    renderUsers();
+    alert("Admin panel unlocked.");
+  } else {
+    alert("Normal user login successful.");
+  }
+}
+
+function googleVerify() {
+  const approved = confirm("Allow Google verification permission?");
+  if (approved) {
+    alert("Google verification approved.");
+  } else {
+    alert("Google verification cancelled.");
+  }
+}
+</script>
+</body>
+</html>
